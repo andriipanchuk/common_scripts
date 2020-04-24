@@ -20,7 +20,6 @@ bastion_access = {
     "non_root_access" : []
 }
 
-uniq_users = set()
 
 def templetize_user_data(team_list:list, team_object:object):
     user_list = []
@@ -32,47 +31,43 @@ def templetize_user_data(team_list:list, team_object:object):
         logging.info(f"####### Getting all members from team <{team_object.name}>")
         member_items = organization.get_team(team_object.id).get_members()
         for user in member_items:
+            
 
-            ## Checking is the user already adeed
-            if user.login not in uniq_users:
+            ## templetizing the user data
+            user_data = {"username" : user.login, "ssh-keys" : [],
+            "comment" : f"<{user.name}>, <{user.email}>, <{user.company}>"}
 
-                ## Added user to uniq list
-                uniq_users.add(user.login)
+            ## if the user has ssh keys
+            if user.get_keys().totalCount:
 
-                ## templetizing the user data
-                user_data = {"username" : user.login, "ssh-keys" : [],
-                "comment" : f"<{user.name}>, <{user.email}>, <{user.company}>"}
+                ## Checking file exists if yes then delete
+                if os.path.isfile(f'{user_data["username"]}.key'):
+                    os.remove(f'{user_data["username"]}.key')
 
-                ## if the user has ssh keys
-                if user.get_keys().totalCount:
+                ## Iterating list of users keys
+                key_items = user.get_keys()
+                for key in key_items:
 
-                    ## Checking file exists if yes then delete
-                    if os.path.isfile(f'{user_data["username"]}.key'):
-                        os.remove(f'{user_data["username"]}.key')
-
-                    ## Iterating list of users keys
-                    key_items = user.get_keys()
-                    for key in key_items:
-
-                        ## Adding list of keys to user data
-                        user_data['ssh-keys'].append(key.key)
+                    ## Adding list of keys to user data
+                    user_data['ssh-keys'].append(key.key)
 
 
-                        ## Createing the keys for the users
-                        with open(f'{user_data["username"]}.key', 'a') as f:
-                            f.write("%s\n" % key.key)
+                    ## Createing the keys for the users
+                    with open(f'{user_data["username"]}.key', 'a') as f:
+                        f.write("%s\n" % key.key)
 
 
-                    ## Adding usert to total list
+                ## Adding usert to total list
+                if user_data not in bastion_access["root_access"]:
                     user_list.append(user_data)
-                else:
-                    logging.warning(f"User <{user.login}> does not have ssh key uploaded on github.")
+            else:
+                logging.warning(f"User <{user.login}> does not have ssh key uploaded on github.")
 
     ## Returing list of users to
     return user_list
 
-if not os.geteuid() == 0:
-    sys.exit("\nOnly root can run this script\n")
+# if not os.geteuid() == 0:
+#     sys.exit("\nOnly root can run this script\n")
 
 team_items = organization.get_teams()
 for team in team_items:
@@ -81,17 +76,28 @@ for team in team_items:
     root_members = templetize_user_data(root_access_teams, team)
     if root_members:
         for user in root_members:
-            # print(f"""###### {user["username"]} '{user["comment"]}' {user["username"]}.key --admin""")
-            os.system(f"""sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key --admin""")
             bastion_access["root_access"].append(user)
-
-    ## Getting non root members
     non_root_members = templetize_user_data(non_root_access_teams, team)
-    if non_root_members:
-        for user in non_root_members:
-            # print(f"""###### {user["username"]} '{user["comment"]}' {user["username"]}.key """)
-            os.system(f"""sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key""")
+
+    for user in non_root_members:
+        if user not in bastion_access["root_access"]:
             bastion_access["non_root_access"].append(user)
+
+for user in bastion_access['non_root_access']:
+    for root_user in bastion_access['root_access']:
+        if user['username'] == root_user['username']:
+            bastion_access['non_root_access'].remove(user)
+
+
+for user in bastion_access["root_access"]:
+    # print(f"""###### {user["username"]} '{user["comment"]}' {user["username"]}.key --admin""")
+    os.system(f"""sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key --admin""")
+
+
+
+for user in bastion_access['non_root_access']:
+    # print(f"""###### {user["username"]} '{user["comment"]}' {user["username"]}.key """)
+    os.system(f"""sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key""")
 
 
 with open("output.json", "w") as file:

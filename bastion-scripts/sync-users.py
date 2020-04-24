@@ -2,6 +2,7 @@ from github import Github
 import os
 import json
 import logging
+import sys
 
 logging.basicConfig()
 logging.getLogger().setLevel(logging.INFO)
@@ -51,11 +52,9 @@ def templetize_user_data(team_list:list, team_object:object):
                     ## Adding list of keys to user data
                     user_data['ssh-keys'].append(key.key)
 
-
                     ## Createing the keys for the users
                     with open(f'{user_data["username"]}.key', 'a') as f:
                         f.write("%s\n" % key.key)
-
 
                 ## Adding usert to total list
                 if user_data not in bastion_access["root_access"]:

@@ -66,8 +66,8 @@ def templetize_user_data(team_list:list, team_object:object):
     ## Returing list of users to
     return user_list
 
-# if not os.geteuid() == 0:
-#     sys.exit("\nOnly root can run this script\n")
+if not os.geteuid() == 0:
+    sys.exit("\nOnly root can run this script\n")
 
 team_items = organization.get_teams()
 for team in team_items:

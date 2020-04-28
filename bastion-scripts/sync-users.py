@@ -18,7 +18,6 @@ for team in organization.get_teams():
     if team.name.lower() not in root_access_teams:
         non_root_access_teams.append(team.name.lower())
 
-print(non_root_access_teams)
 bastion_access = {
     "root_access" : [],
     "non_root_access" : []

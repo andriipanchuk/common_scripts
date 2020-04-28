@@ -7,15 +7,18 @@ import sys
 logging.basicConfig()
 logging.getLogger().setLevel(logging.INFO)
 
-g = Github(os.environ.get("GIT_TOKEN"))
-
 organization_name = "fuchicorp"
-root_access_teams = ["devops", "bastion_root"]
-non_root_access_teams = ["dev", "members"]
-
+g = Github(os.environ.get("GIT_TOKEN"))
 organization = g.get_organization(organization_name)
 
 
+root_access_teams = ["devops", "bastion_root"]
+non_root_access_teams = []
+for team in organization.get_teams():
+    if team.name.lower() not in root_access_teams:
+        non_root_access_teams.append(team.name.lower())
+
+print(non_root_access_teams)
 bastion_access = {
     "root_access" : [],
     "non_root_access" : []
@@ -65,8 +68,8 @@ def templetize_user_data(team_list:list, team_object:object):
     ## Returing list of users to
     return user_list
 
-if not os.geteuid() == 0:
-    sys.exit("\nOnly root can run this script\n")
+# if not os.geteuid() == 0:
+#     sys.exit("\nOnly root can run this script\n")
 
 team_items = organization.get_teams()
 for team in team_items:
@@ -89,14 +92,14 @@ for user in bastion_access['non_root_access']:
 
 
 for user in bastion_access["root_access"]:
-    # print(f"""###### {user["username"]} '{user["comment"]}' {user["username"]}.key --admin""")
-    os.system(f"""sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key --admin""")
+    print(f"""###### {user["username"]} '{user["comment"]}' {user["username"]}.key --admin""")
+    # os.system(f"""sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key --admin""")
 
 
 
 for user in bastion_access['non_root_access']:
-    # print(f"""###### {user["username"]} '{user["comment"]}' {user["username"]}.key """)
-    os.system(f"""sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key""")
+    print(f"""###### {user["username"]} '{user["comment"]}' {user["username"]}.key """)
+    # os.system(f"""sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key""")
 
 
 with open("output.json", "w") as file:

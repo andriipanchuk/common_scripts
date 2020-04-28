@@ -6,13 +6,13 @@ from github import Github
 ## organization name and token on env
 organization = 'fuchicorp'
 
-header = {"Authorization": f'token {token}', "Accept" : "application/vnd.github.inertia-preview+json"}
 
 
 token = os.environ.get("GIT_ADMIN_TOKEN")
 
 with open('github-management/manage-users/users-to-add.txt') as file:
     users = file.read().splitlines()
+
 
 g = Github('fsadykov', token, base_url='https://api.github.com')
 org = g.get_organization('fuchicorp')

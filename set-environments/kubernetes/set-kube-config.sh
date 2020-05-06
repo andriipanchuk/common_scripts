@@ -15,14 +15,14 @@ if kubectl get sa -n "${NAMESPACE}" "${ADMIN_SERVICE_ACCOUNT}" > /dev/null 2>&1;
   echo "Service Account $ADMIN_SERVICE_ACCOUNT already exist"
 else
   kubectl create serviceaccount -n "${NAMESPACE}" "${ADMIN_SERVICE_ACCOUNT}"
-  kubectl create clusterrolebinding root-cluster-admin-binding --clusterrole=cluster-admin --serviceaccount="${NAMESPACE}":"${ADMIN_SERVICE_ACCOUNT}"
+  kubectl create clusterrolebinding root-cluster-admin-binding --clusterrole=cluster-view --serviceaccount="${NAMESPACE}":"${ADMIN_SERVICE_ACCOUNT}"
 fi
 
 if kubectl get  serviceaccount -n "${NAMESPACE}" "${SERVICE_ACCOUNT}" > /dev/null 2>&1; then
   echo "Service account $SERVICE_ACCOUNT already exist"
 else
   kubectl create sa -n "${NAMESPACE}" "${SERVICE_ACCOUNT}"
-  kubectl create clusterrolebinding root-cluster-view-binding --clusterrole=view --serviceaccount="${NAMESPACE}":"${SERVICE_ACCOUNT}"
+  kubectl create clusterrolebinding root-cluster-view-binding --clusterrole=cluster-view --serviceaccount="${NAMESPACE}":"${SERVICE_ACCOUNT}"
 fi
 echo "Serviceaccounts and clusterrolebindings are created ready to use"
 

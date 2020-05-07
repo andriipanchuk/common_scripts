@@ -7,14 +7,16 @@ import sys
 logging.basicConfig()
 logging.getLogger().setLevel(logging.INFO)
 
-g = Github(os.environ.get("GIT_TOKEN"))
-
 organization_name = "fuchicorp"
-root_access_teams = ["devops", "bastion_root"]
-non_root_access_teams = ["dev", "members"]
-
+g = Github(os.environ.get("GIT_TOKEN"))
 organization = g.get_organization(organization_name)
 
+
+root_access_teams = ["devops", "bastion_root"]
+non_root_access_teams = []
+for team in organization.get_teams():
+    if team.name.lower() not in root_access_teams:
+        non_root_access_teams.append(team.name.lower())
 
 bastion_access = {
     "root_access" : [],

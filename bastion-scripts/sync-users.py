@@ -65,8 +65,8 @@ def templetize_user_data(team_list:list, team_object:object):
     ## Returing list of users to
     return user_list
 
-if not os.geteuid() == 0:
-    sys.exit("\nOnly root can run this script\n")
+# if not os.geteuid() == 0:
+#     sys.exit("\nOnly root can run this script\n")
 
 team_items = organization.get_teams()
 for team in team_items:
@@ -87,17 +87,25 @@ for user in bastion_access['non_root_access']:
         if user['username'] == root_user['username']:
             bastion_access['non_root_access'].remove(user)
 
-
 for user in bastion_access["root_access"]:
-    # print(f"""###### {user["username"]} '{user["comment"]}' {user["username"]}.key --admin""")
-    os.system(f"""sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key --admin""")
+    print(f"""###### {user["username"]} '{user["comment"]}' {user["username"]}.key --admin""")
+    # os.system(f"""sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key --admin""")
 
 
 
 for user in bastion_access['non_root_access']:
-    # print(f"""###### {user["username"]} '{user["comment"]}' {user["username"]}.key """)
-    os.system(f"""sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key""")
+    print(f"""###### {user["username"]} '{user["comment"]}' {user["username"]}.key """)
+    # os.system(f"""sudo sh user_add.sh {user["username"]} '{user["comment"]}' {user["username"]}.key""")
 
 
 with open("output.json", "w") as file:
     json.dump(bastion_access, file, indent=2)
+
+
+import json
+
+with open("output.json") as file:
+    bastion_access = json.load(file)
+
+for user in bastion_access['non_root_access']:
+    print(user['username'])

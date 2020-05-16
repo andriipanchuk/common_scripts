@@ -28,7 +28,7 @@ export GIT_TOKEN='your token'
 If you set environment variables correctly you can go ahead with scripts. You will have two scripts first `create-github-labels.py` which will create all labels second `delete-github-labels.py` which  will delete all lables for you.
 
 ```
-python python github-management/manage-labels/sync-create-github-labels.py    
+python github-management/manage-labels/sync-create-github-labels.py    
 ```
 
 

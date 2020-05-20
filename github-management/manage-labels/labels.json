@@ -153,5 +153,10 @@
     "name": "Groovy",
     "color": "619cbd",
     "description": "If this issue is related Groovy."
+  },
+  {
+    "name": "Django",
+    "color": "619cbd",
+    "description": "If this issue is related Django."
   }
 ]

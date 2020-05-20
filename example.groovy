@@ -71,24 +71,23 @@ def slavePodTemplate = """
             ])
 
           container("python-container"){
-            stage("Pull SCM") {
-               git branch: 'feature/atakanerdil2559', url: 'https://github.com/fuchicorp/common_scripts.git'
-            }
-            stage("Installing") {
-                sh 'pip install -r  github-management/manage-labels/requirements.txt'
-            }
-            stage("Authentication") {
-                sh '''
-                export GIT_ORG='fuchicorp'
-                export GIT_TOKEN=''
-              '''
-            }
-            stage("Running Script") {
-                sh 'python github-management/manage-labels/sync-create-github-labels.py'
-            }
+            withCredentials([string(credentialsId: 'git-token-labels', variable: 'GIT_TOKEN')]) {
 
+              stage("Pull SCM") {
+                git branch: 'feature/atakanerdil2559', url: 'https://github.com/fuchicorp/common_scripts.git'
+              }
+              
+              stage("Installing") {
+                  sh 'pip install -r  github-management/manage-labels/requirements.txt'
+              }
+              
+              stage("Running Script") {
+                  sh 'python github-management/manage-labels/sync-create-github-labels.py'
+              }
+
+
+            }
           }
-          
       }
     }
        

@@ -6,9 +6,9 @@ JENKINS_POD_NAME="$(kubectl get pods -n tools | grep jenkins-deploy | awk '{prin
 
 if [ "$1" = "--sync" ]; then
   kubectl cp tools/$JENKINS_POD_NAME:/var/jenkins_home/secrets ~/secrets
-  kubectl cp tools/$JENKINS_POD_NAME:/var/jenkins_home/secret.key ~
+  kubectl cp tools/$JENKINS_POD_NAME:/var/jenkins_home/secret.key ~/secret.key
   kubectl cp tools/$JENKINS_POD_NAME:/var/jenkins_home/jobs  ~/jobs
-  kubectl cp tools/$JENKINS_POD_NAME:/var/jenkins_home/credentials.xml ~
+  kubectl cp tools/$JENKINS_POD_NAME:/var/jenkins_home/credentials.xml ~/credentials.xml
 fi
 
 

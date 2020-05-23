@@ -70,3 +70,4 @@ export DATAFILE
 /bin/rm -rf "$PWD/common_configuration.tfvars" 2>/dev/null
 echo "setenv: Initializing terraform"
 terraform init #> /dev/null
+

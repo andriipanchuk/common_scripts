@@ -20,7 +20,7 @@ JENKINS_HOME='./jenkins_home'
 if [ ! -d "$JENKINS_HOME" ]; then
   mkdir -p "$JENKINS_HOME"
 
-  echo "${green}<$JENKINS_HOME)> directory created${reset}"
+  echo "${green}<$JENKINS_HOME)> directory is created${reset}"
 fi
 
 

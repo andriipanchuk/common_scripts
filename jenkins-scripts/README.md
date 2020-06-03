@@ -33,12 +33,14 @@ Once this repo is cloned you can find the script under `jenkins-scripts/jenkins-
 ```
 sh jenkins-pod-snapshot.sh --sync
 ```
-
-
-Once the above command is ran, then run the `ls` command. 
-
+You should see the following output:
+```
+<./jenkins_home)> directory created
+Successfully copied necessary folders from jenkins server to jenkins_home <(./jenkins_home)> directory!
+```
+Then run the `ls` command. 
 You will see a directory called `jenkins_home` under the current directory ` < ./ >` is created.
-
+Then run `cd jenkins_home` command and `ls` command. 
 You will also see the following files and folders are copied from Jenkins server/pod to `jenkins_home` directory. 
   
 ```
@@ -56,5 +58,8 @@ secret.key
 ```
 sh jenkins-pod-snapshot.sh --restore
 ```
-
+You should see the following output:
+```
+Successfully copied necessary folders from jenkins server to jenkins_home <(./jenkins_home)> directory!
+```
 This command will copy the above files and folders inside `jenkins_home` back to the Jenkins server/pod. 

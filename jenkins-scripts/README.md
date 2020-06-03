@@ -35,12 +35,15 @@ sh jenkins-pod-snapshot.sh --sync
 ```
 You should see the following output:
 ```
-<./jenkins_home)> directory created
+<./jenkins_home)> directory is created
 Successfully copied necessary folders from jenkins server to jenkins_home <(./jenkins_home)> directory!
 ```
 Then run the `ls` command. 
+
 You will see a directory called `jenkins_home` under the current directory ` < ./ >` is created.
+
 Then run `cd jenkins_home` command and `ls` command. 
+
 You will also see the following files and folders are copied from Jenkins server/pod to `jenkins_home` directory. 
   
 ```
@@ -60,6 +63,6 @@ sh jenkins-pod-snapshot.sh --restore
 ```
 You should see the following output:
 ```
-Successfully copied necessary folders from jenkins server to jenkins_home <(./jenkins_home)> directory!
+Successfully copied jenkins folders from <(./jenkins_home)> directory back to jenkins server!
 ```
 This command will copy the above files and folders inside `jenkins_home` back to the Jenkins server/pod. 

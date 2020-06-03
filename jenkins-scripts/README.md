@@ -28,7 +28,7 @@ https://github.com/fuchicorp/common_scripts.git
 Once this repo is cloned you can find the script under `jenkins-scripts/jenkins-pod-snapshot.sh `
 
 
-### Command to run to copy files and folders from Jenkins server/pod to a directory called `jenkins_home`:
+### Command to run to copy files and folders from Jenkins server/pod to a directory called jenkins_home:
 
 ```
 sh jenkins-pod-snapshot.sh --sync

@@ -25,7 +25,7 @@ fi
 
 
 
-# Copies important folders from jenkins pod to jenkins_home directory under ./
+# Copies important folders from jenkins server to jenkins_home directory under ./
 if [ "$1" = "--sync" ]; then
   kubectl cp tools/$JENKINS_POD_NAME:/var/jenkins_home/secrets $JENKINS_HOME/secrets  2 > /dev/null
   kubectl cp tools/$JENKINS_POD_NAME:/var/jenkins_home/secret.key $JENKINS_HOME/secret.key 2 > /dev/null
@@ -38,7 +38,7 @@ fi
 
 
 
-# Copies folders under ./jenkins_home back to jenkins pod
+# Copies folders under ./jenkins_home directory back to jenkins server
 if [ "$1" = "--restore" ]; then
   kubectl cp $JENKINS_HOME/secrets tools/$JENKINS_POD_NAME:/var/jenkins_home 2 > /dev/null
   kubectl cp $JENKINS_HOME/secret.key tools/$JENKINS_POD_NAME:/var/jenkins_home 2 > /dev/null
@@ -46,5 +46,5 @@ if [ "$1" = "--restore" ]; then
   kubectl cp $JENKINS_HOME/credentials.xml tools/$JENKINS_POD_NAME:/var/jenkins_home 2 > /dev/null
   kubectl cp $JENKINS_HOME/config.xml tools/$JENKINS_POD_NAME:/var/jenkins_home/config.xml 2 > /dev/null
 
-  echo "${green}Successfully copied jenkins folders from <($JENKINS_HOME)> back to jenkins server!${reset}"
+  echo "${green}Successfully copied jenkins folders from <($JENKINS_HOME)> directory back to jenkins server!${reset}"
 fi

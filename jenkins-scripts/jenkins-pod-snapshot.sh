@@ -44,7 +44,7 @@ if [ "$1" = "--restore" ]; then
   kubectl cp $JENKINS_HOME/secret.key tools/$JENKINS_POD_NAME:/var/jenkins_home 2 > /dev/null
   kubectl cp $JENKINS_HOME/jobs tools/$JENKINS_POD_NAME:/var/jenkins_home 2 > /dev/null
   kubectl cp $JENKINS_HOME/credentials.xml tools/$JENKINS_POD_NAME:/var/jenkins_home 2 > /dev/null
-  kubectl cp $JENKINS_HOME/config.xml tools/$JENKINS_POD_NAME:/var/jenkins_home/config.xml 2 > /dev/null
+  kubectl cp $JENKINS_HOME/config.xml tools/$JENKINS_POD_NAME:/var/jenkins_home 2 > /dev/null
 
   echo "${green}Successfully copied jenkins folders from <($JENKINS_HOME)> directory back to jenkins server!${reset}"
 fi
